@@ -49,12 +49,12 @@ router.get("/:id", verifyToken, async (req, res) => {
   const user = await connection
     .promise()
     .query(`SELECT * FROM users WHERE id='${req.params.id}'`);
-  res.send(user[0][0]);
+  res.send(user[0][0]); /// SELECT TOP 
 });
 router.delete("/:id", verifyToken, async (req, res) => {
   await connection
     .promise()
-    .query(`DELETE FROM users WHERE id='${req.params.id}'`);
+    .query(`DELETE FROM users WHERE id='${req.params.id}'`);/// Обработка ошибок 
   res.send({ msg: "success" });
 });
 
@@ -74,4 +74,5 @@ export default router;
  * Страница для регистрации
  *  api /login body логин и пароль . ответе информация о пользователе либо 401
  *  jvt-токен
+ * 400 404 
  */
