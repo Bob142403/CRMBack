@@ -1,4 +1,4 @@
-import { PRIVATE_KEY } from "../routes/users.js";
+import { PRIVATE_KEY } from "../users/users.route.js";
 import jsonwebtoken from "jsonwebtoken";
 
 export function verifyToken(req, res, next) {
@@ -9,3 +9,4 @@ export function verifyToken(req, res, next) {
     res.status(400).json("Token is not verified");
   }
 }
+ 
