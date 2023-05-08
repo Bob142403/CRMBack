@@ -1,7 +1,10 @@
 import connection from "../../db.js";
+import { Request, Response } from "express";
+import jsonwebtoken from "jsonwebtoken";
+import { PRIVATE_KEY } from "./users.route.js";
 
 class Users {
-  async addUser(req, res) {
+  async addUser(req: Request, res: Response) {
     const { first_name, last_name, email, password } = req.body;
     if (first_name && last_name && email && password) {
       try {
@@ -16,14 +19,14 @@ class Users {
       }
     } else res.status(400);
   }
-  async deleteUser(req, res) {
+  async deleteUser(req: Request, res: Response) {
     const qwe = await connection
       .promise()
       .query(`DELETE FROM users WHERE id='${req.params.id}'`); /// Обработка ошибок
     if (qwe[0].affectedRows) res.status(200).json("Success");
     else res.status(400).json("Incorrect Id!");
   }
-  async updateUser(req, res) {
+  async updateUser(req: Request, res: Response) {
     const { first_name, last_name, email } = req.body;
     const qwe = await connection
       .promise()
@@ -33,18 +36,18 @@ class Users {
     if (qwe[0].affectedRows) res.status(200).json("Success");
     else res.status(400).json("Incorrect Id!");
   }
-  async getUserById(req, res) {
+  async getUserById(req: Request, res: Response) {
     const user = await connection
       .promise()
       .query(`SELECT * FROM users WHERE id='${req.params.id}'`);
     if (user[0].length) res.status(200).json(user[0][0]); /// SELECT TOP
     else res.status(400).json("Incorrect Id!");
   }
-  async getUsers(req, res) {
+  async getUsers(req: Request, res: Response) {
     const users = await connection.promise().query(`SELECT * FROM users`);
     res.status(200).json(users[0]);
   }
-  async login(req, res) {
+  async login(req: Request, res: Response) {
     const { email, password } = req.body;
     if (email && password) {
       const token = jsonwebtoken.sign(req.body, PRIVATE_KEY);
