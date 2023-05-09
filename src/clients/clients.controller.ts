@@ -1,4 +1,4 @@
-import connection from "../servers/db.ts";
+import connection from "../services/db.ts";
 import { Request, Response } from "express";
 
 interface qwe {

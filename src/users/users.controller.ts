@@ -1,4 +1,4 @@
-import connection from "../servers/db.ts";
+import connection from "../services/db.ts";
 import { Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 import { PRIVATE_KEY } from "./users.route.ts";
