@@ -1,7 +1,12 @@
-import connection from "../../db.js";
+import connection from "../../db.ts";
 import { Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
-import { PRIVATE_KEY } from "./users.route.js";
+import { PRIVATE_KEY } from "./users.route.ts";
+import { Interface } from "readline";
+
+interface qwe {
+  affectedRows: number;
+}
 
 class Users {
   async addUser(req: Request, res: Response) {
@@ -23,8 +28,10 @@ class Users {
     const qwe = await connection
       .promise()
       .query(`DELETE FROM users WHERE id='${req.params.id}'`); /// Обработка ошибок
-    if (qwe[0].affectedRows) res.status(200).json("Success");
-    else res.status(400).json("Incorrect Id!");
+    const wer: qwe = qwe[0] as qwe;
+    // console.log(wer);
+    // if (qwe[0].affeclstedRows) res.status(200).json("Success");
+    // else res.status(400).json("Incorrect Id!");
   }
   async updateUser(req: Request, res: Response) {
     const { first_name, last_name, email } = req.body;
@@ -33,14 +40,17 @@ class Users {
       .query(
         `UPDATE users SET first_name='${first_name}', last_name='${last_name}' , email='${email}' WHERE id='${req.params.id}'`
       );
-    if (qwe[0].affectedRows) res.status(200).json("Success");
-    else res.status(400).json("Incorrect Id!");
+    const wer = qwe[0] as Object;
+    console.log(wer.affectedRows);
+    // if (qwe[0].affectedRows) res.status(200).json("Success");
+    // else res.status(400).json("Incorrect Id!");
   }
   async getUserById(req: Request, res: Response) {
-    const user = await connection
+    const qwe = await connection
       .promise()
       .query(`SELECT * FROM users WHERE id='${req.params.id}'`);
-    if (user[0].length) res.status(200).json(user[0][0]); /// SELECT TOP
+    const user = qwe[0] as Object[];
+    if (user.length) res.status(200).json(user[0]); /// SELECT TOP
     else res.status(400).json("Incorrect Id!");
   }
   async getUsers(req: Request, res: Response) {
@@ -51,12 +61,13 @@ class Users {
     const { email, password } = req.body;
     if (email && password) {
       const token = jsonwebtoken.sign(req.body, PRIVATE_KEY);
-      const user = await connection
+      const qwe = await connection
         .promise()
         .query(
           `SELECT * FROM users WHERE email='${email}' and password='${password}'`
         );
-      if (!user[0].length) {
+      const user = qwe[0] as Object[];
+      if (!user.length) {
         res.status(404).json("NETY -_-");
       } else res.status(200).json({ msg: token });
     } else res.status(404).json("Incorrect Data!");

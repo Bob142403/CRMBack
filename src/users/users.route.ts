@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { verifyToken } from "../middlewares/verifyToken.js";
-import Users from "./users.controller.js";
+import { verifyToken } from "../middlewares/verifyToken.ts";
+import Users from "./users.controller.ts";
 
 const router = Router();
 const users = new Users();

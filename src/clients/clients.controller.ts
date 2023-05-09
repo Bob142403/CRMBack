@@ -1,4 +1,4 @@
-import connection from "../../db.js";
+import connection from "../../db.ts";
 
 class Clients {
   async addClient(req, res) {
