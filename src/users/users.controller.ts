@@ -1,8 +1,7 @@
-import connection from "../../db.ts";
+import connection from "../servers/db.ts";
 import { Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 import { PRIVATE_KEY } from "./users.route.ts";
-import { Interface } from "readline";
 
 interface qwe {
   affectedRows: number;
@@ -28,10 +27,9 @@ class Users {
     const qwe = await connection
       .promise()
       .query(`DELETE FROM users WHERE id='${req.params.id}'`); /// Обработка ошибок
-    const wer: qwe = qwe[0] as qwe;
-    // console.log(wer);
-    // if (qwe[0].affeclstedRows) res.status(200).json("Success");
-    // else res.status(400).json("Incorrect Id!");
+    const wer = qwe[0] as qwe;
+    if (wer.affectedRows) res.status(200).json("Success");
+    else res.status(400).json("Incorrect Id!");
   }
   async updateUser(req: Request, res: Response) {
     const { first_name, last_name, email } = req.body;
@@ -40,10 +38,9 @@ class Users {
       .query(
         `UPDATE users SET first_name='${first_name}', last_name='${last_name}' , email='${email}' WHERE id='${req.params.id}'`
       );
-    const wer = qwe[0] as Object;
-    console.log(wer.affectedRows);
-    // if (qwe[0].affectedRows) res.status(200).json("Success");
-    // else res.status(400).json("Incorrect Id!");
+    const wer = qwe[0] as qwe;
+    if (wer.affectedRows) res.status(200).json("Success");
+    else res.status(400).json("Incorrect Id!");
   }
   async getUserById(req: Request, res: Response) {
     const qwe = await connection
