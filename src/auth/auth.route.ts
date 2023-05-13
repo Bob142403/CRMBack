@@ -4,13 +4,8 @@ import Auth from "./auth.controller.ts";
 const router = Router();
 const auth = new Auth();
 
-router.post("/", clients.addClient);
+router.post("/login", auth.signIn);
 
-router.delete("/:id", clients.deleteClient);
-
-router.get("/", clients.getClients);
-router.get("/:id", clients.getClientById);
-
-router.put("/:id", clients.updateClient);
+router.post("/sign-up", auth.signUp);
 
 export default router;

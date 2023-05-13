@@ -20,6 +20,7 @@ class Clients {
         res.status(400);
       }
     } else res.status(400);
+    return req.body;
   }
   async deleteClient(req: Request, res: Response) {
     const qwe = await connection
@@ -28,6 +29,7 @@ class Clients {
     const wer = qwe[0] as qwe;
     if (wer.affectedRows) res.status(200).json("Success");
     else res.status(400).json("Incorrect Id!");
+    return wer.affectedRows;
   }
   async updateClient(req: Request, res: Response) {
     const { first_name, last_name, email, phone_number, address } = req.body;
@@ -39,6 +41,7 @@ class Clients {
     const wer = qwe[0] as qwe;
     if (wer.affectedRows) res.status(200).json("Success");
     else res.status(400).json("Incorrect Id!");
+    return req.body;
   }
   async getClientById(req: Request, res: Response) {
     const clients = await connection
@@ -47,10 +50,12 @@ class Clients {
     const client = clients[0] as Object[];
     if (client.length) res.status(200).json(client[0]); /// SELECT TOP
     else res.status(400).json("Incorrect Id!");
+    return client;
   }
   async getClients(req: Request, res: Response) {
     const clients = await connection.promise().query(`SELECT * FROM clients`);
     res.status(200).json(clients[0]);
+    return clients;
   }
 }
 

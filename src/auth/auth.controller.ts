@@ -3,12 +3,8 @@ import { Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 import { PRIVATE_KEY } from "../users/users.route.ts";
 
-interface qwe {
-  affectedRows: number;
-}
-
 class Auth {
-  async login(req: Request, res: Response) {
+  async signIn(req: Request, res: Response) {
     const { email, password } = req.body;
     if (email && password) {
       const token = jsonwebtoken.sign(req.body, PRIVATE_KEY);
