@@ -7,7 +7,7 @@ const users = new Users();
 
 export const PRIVATE_KEY = "SHHHHH";
 
-router.post("/", users.addUser);
+router.post("/", verifyToken, users.addUser);
 
 router.delete("/:id", verifyToken, users.deleteUser);
 

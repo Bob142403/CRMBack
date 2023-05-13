@@ -1,12 +1,13 @@
-import { DataSource, createConnection } from "typeorm";
-import { User } from "./src/entity/user.entity";
+import { DataSource } from "typeorm";
 
-export const myDataSource = createConnection({
+export const myDataSource = new DataSource({
   type: "mysql",
-  database: "CRM",
+  host: "localhost",
+  port: 3306,
   username: "root",
   password: "Iwanttoplaym0ba",
-  entities: [User],
+  database: "CRM",
+  entities: ["src/entity/*.js"],
   logging: true,
   synchronize: true,
 });

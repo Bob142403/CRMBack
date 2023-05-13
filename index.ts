@@ -2,7 +2,6 @@ import cors from "cors";
 import users from "./src/users/users.route.ts";
 import clients from "./src/clients/clients.route.ts";
 import auths from "./src/auth/auth.route.ts";
-import { verifyToken } from "./src/middlewares/verifyToken.ts";
 import express from "express";
 
 const PORT = process.env.PORT ?? 3000;
