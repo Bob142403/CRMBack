@@ -1,62 +1,60 @@
-import connection from "../services/db.ts";
 import { Request, Response } from "express";
+import { Users } from "../entity/user.entity.ts";
+import { myDataSource } from "../services/db.ts";
 
-interface qwe {
-  affectedRows: number;
-}
-
-class Users {
+class UsersController {
   async addUser(req: Request, res: Response) {
     const { first_name, last_name, email, password } = req.body;
     if (first_name && last_name && email && password) {
       try {
-        await connection
-          .promise()
-          .query(
-            `INSERT INTO users (first_name, last_name, email, password) VALUE('${first_name}', '${last_name}', '${email}', '${password}')`
-          );
-        res.status(200).json({ msg: "Create User" });
+        const user = await myDataSource.getRepository(Users).create(req.body);
+        await myDataSource.getRepository(Users).save(user);
+        res.status(200).json("User Created");
       } catch (err) {
         res.status(400);
       }
-    } else res.status(400);
+    } else res.status(400).json("Error");
     return req.body;
   }
   async deleteUser(req: Request, res: Response) {
-    const qwe = await connection
-      .promise()
-      .query(`DELETE FROM users WHERE id='${req.params.id}'`); /// Обработка ошибок
-    const wer = qwe[0] as qwe;
-    if (wer.affectedRows) res.status(200).json("Success");
+    const results = await myDataSource
+      .getRepository(Users)
+      .delete(req.params.id);
+
+    if (results.affected) res.status(200).json("Success");
     else res.status(400).json("Incorrect Id!");
-    return wer.affectedRows;
+
+    return results.affected;
   }
   async updateUser(req: Request, res: Response) {
-    const { first_name, last_name, email } = req.body;
-    const qwe = await connection
-      .promise()
-      .query(
-        `UPDATE users SET first_name='${first_name}', last_name='${last_name}' , email='${email}' WHERE id='${req.params.id}'`
-      );
-    const wer = qwe[0] as qwe;
-    if (wer.affectedRows) res.status(200).json("Success");
-    else res.status(400).json("Incorrect Id!");
+    const user = await myDataSource.getRepository(Users).findOneBy({
+      id: +req.params.id,
+    });
+    if (user) {
+      myDataSource.getRepository(Users).merge(user, req.body);
+
+      const results = await myDataSource.getRepository(Users).save(user);
+
+      res.json(results);
+    } else res.status(400).json("Incorrect Id!");
     return req.body;
   }
   async getUserById(req: Request, res: Response) {
-    const qwe = await connection
-      .promise()
-      .query(`SELECT * FROM users WHERE id='${req.params.id}'`);
-    const user = qwe[0] as Object[];
-    if (user.length) res.status(200).json(user[0]); /// SELECT TOP
+    const results = await myDataSource.getRepository(Users).findOneBy({
+      id: +req.params.id,
+    });
+
+    if (results) res.status(200).json(results);
     else res.status(400).json("Incorrect Id!");
-    return user;
+
+    return results;
   }
   async getUsers(req: Request, res: Response) {
-    const users = await connection.promise().query(`SELECT * FROM users`);
-    res.status(200).json(users[0]);
+    const users = await myDataSource.getRepository(Users).find();
+
+    res.status(200).json(users);
     return users;
   }
 }
 
-export default Users;
+export default UsersController;

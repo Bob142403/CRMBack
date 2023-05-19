@@ -1,20 +1,16 @@
-import connection from "../services/db.ts";
 import { Request, Response } from "express";
+import { myDataSource } from "../services/db.ts";
+import { Clients } from "../entity/client.entity.ts";
 
-interface qwe {
-  affectedRows: number;
-}
-
-class Clients {
+class ClientsController {
   async addClient(req: Request, res: Response) {
     const { first_name, last_name, email, phone_number, address } = req.body;
     if (first_name && last_name && email && phone_number && address) {
       try {
-        await connection
-          .promise()
-          .query(
-            `INSERT INTO clients (first_name, last_name, email, phone_number, address) VALUE('${first_name}', '${last_name}', '${email}', '${phone_number}', '${address}')`
-          );
+        const client = await myDataSource
+          .getRepository(Clients)
+          .create(req.body);
+        await myDataSource.getRepository(Clients).save(client);
         res.status(200).json("Client created!");
       } catch (err) {
         res.status(400);
@@ -23,40 +19,43 @@ class Clients {
     return req.body;
   }
   async deleteClient(req: Request, res: Response) {
-    const qwe = await connection
-      .promise()
-      .query(`DELETE FROM clients WHERE id='${req.params.id}'`); /// Обработка ошибок
-    const wer = qwe[0] as qwe;
-    if (wer.affectedRows) res.status(200).json("Success");
+    const results = await myDataSource
+      .getRepository(Clients)
+      .delete(req.params.id);
+
+    if (results.affected) res.status(200).json("Success");
     else res.status(400).json("Incorrect Id!");
-    return wer.affectedRows;
+    return results.affected;
   }
   async updateClient(req: Request, res: Response) {
-    const { first_name, last_name, email, phone_number, address } = req.body;
-    const qwe = await connection
-      .promise()
-      .query(
-        `UPDATE clients SET first_name='${first_name}', last_name='${last_name}', email='${email}', phone_number='${phone_number}', address='${address}' WHERE id='${req.params.id}'`
-      );
-    const wer = qwe[0] as qwe;
-    if (wer.affectedRows) res.status(200).json("Success");
-    else res.status(400).json("Incorrect Id!");
+    const client = await myDataSource.getRepository(Clients).findOneBy({
+      id: +req.params.id,
+    });
+    if (client) {
+      myDataSource.getRepository(Clients).merge(client, req.body);
+
+      const results = await myDataSource.getRepository(Clients).save(client);
+
+      res.json(results);
+    } else res.status(400).json("Incorrect Id!");
     return req.body;
   }
   async getClientById(req: Request, res: Response) {
-    const clients = await connection
-      .promise()
-      .query(`SELECT * FROM clients WHERE id='${req.params.id}'`);
-    const client = clients[0] as Object[];
-    if (client.length) res.status(200).json(client[0]); /// SELECT TOP
+    const client = await myDataSource.getRepository(Clients).findOneBy({
+      id: +req.params.id,
+    });
+
+    if (client) res.status(200).json(client);
     else res.status(400).json("Incorrect Id!");
+
     return client;
   }
   async getClients(req: Request, res: Response) {
-    const clients = await connection.promise().query(`SELECT * FROM clients`);
-    res.status(200).json(clients[0]);
+    const clients = await myDataSource.getRepository(Clients).find();
+
+    res.status(200).json(clients);
     return clients;
   }
 }
 
-export default Clients;
+export default ClientsController;

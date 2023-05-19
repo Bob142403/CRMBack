@@ -1,9 +1,9 @@
 import { Router } from "express";
-import Clients from "./clients.controller.ts";
+import ClientsController from "./clients.controller.ts";
 import { verifyToken } from "../middlewares/verifyToken.ts";
 
 const router = Router();
-const clients = new Clients();
+const clients = new ClientsController();
 
 router.post("/", verifyToken, clients.addClient);
 
