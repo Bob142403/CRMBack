@@ -33,9 +33,15 @@ class Auth {
     return req.body;
   }
   async auth(req: Request, res: Response) {
-    const 
+    try {
+      const token = req.headers.authorization;
+      const user = jsonwebtoken.verify(token || "", PRIVATE_KEY);
+      res.status(200).json(user);
+    } catch (err) {
+      res.status(400).json("Token is not verified");
+    }
   }
 }
-//auth 
+//auth
 //axios
 export default Auth;
