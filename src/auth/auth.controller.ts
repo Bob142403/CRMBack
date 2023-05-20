@@ -32,6 +32,10 @@ class Auth {
     } else res.status(400).json("Error");
     return req.body;
   }
+  async auth(req: Request, res: Response) {
+    const 
+  }
 }
-
+//auth 
+//axios
 export default Auth;

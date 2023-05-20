@@ -22,3 +22,4 @@ myDataSource
   .catch((err) => {
     console.error("Error during Data Source initialization:", err);
   });
+  //eslint pretty ну и название migration 

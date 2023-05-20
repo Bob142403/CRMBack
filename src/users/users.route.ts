@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyToken } from "../middlewares/verifyToken.ts";
+import { verifyToken } from "../middlewares/verify-token.ts";
 import UsersController from "./users.controller.ts";
 
 const router = Router();
