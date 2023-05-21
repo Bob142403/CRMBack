@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { CreateUsersMigration1566993933806 } from "../migrations/1-create-user";
+import { CreateUsersMigration1566993933806 } from "../migrations/1566993933806-CreateUsersMigration";
 
 export const myDataSource = new DataSource({
   type: "mysql",
@@ -13,7 +13,6 @@ export const myDataSource = new DataSource({
   migrations: [CreateUsersMigration1566993933806],
 });
 
-
 myDataSource
   .initialize()
   .then(() => {
@@ -22,4 +21,4 @@ myDataSource
   .catch((err) => {
     console.error("Error during Data Source initialization:", err);
   });
-  //eslint pretty ну и название migration 
+//eslint pretty ну и название migration
