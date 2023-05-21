@@ -2,19 +2,17 @@ import { Router } from 'express'
 import { verifyToken } from '../middlewares/verify-token.ts'
 import UsersController from './users.controller.ts'
 
-const router = Router()
-const users = new UsersController()
-
 export const PRIVATE_KEY = 'SHHHHH'
 
-router.post('/', verifyToken, users.addUser)
+const { addUser, getUserById, updateUser, deleteUser, getUsers } =
+  new UsersController()
 
-router.delete('/:id', verifyToken, users.deleteUser)
-
-router.put('/:id', verifyToken, users.updateUser)
-
-router.get('/', verifyToken, users.getUsers)
-
-router.get('/:id', verifyToken, users.getUserById)
+const router = Router()
+  .use(verifyToken)
+  .post('/', addUser)
+  .delete('/:id', deleteUser)
+  .put('/:id', updateUser)
+  .get('/', getUsers)
+  .get('/:id', getUserById)
 
 export default router

@@ -30,6 +30,7 @@ class Auth {
         res.status(400)
       }
     } else res.status(400).json('Incorrect User!')
+
     return req.body
   }
   async auth(req: Request, res: Response) {

@@ -1,13 +1,11 @@
 import { Router } from 'express'
 import Auth from './auth.controller.ts'
 
+const { signIn, signUp, auth } = new Auth()
+
 const router = Router()
-const auth = new Auth()
-
-router.post('/login', auth.signIn)
-
-router.post('/sign-up', auth.signUp)
-
-router.post('/auth', auth.auth)
+  .post('/login', signIn)
+  .post('/sign-up', signUp)
+  .post('/auth', auth)
 
 export default router
