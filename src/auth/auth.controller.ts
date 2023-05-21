@@ -14,9 +14,9 @@ class Auth {
         password,
       })
       if (!user) {
-        res.status(404).json('NETY -_-')
+        res.status(404).json('User Not Found!')
       } else res.status(200).json({ msg: token })
-    } else res.status(404).json('Incorrect Data!')
+    } else res.status(404).json('Incorrect User!')
     return req.body
   }
   async signUp(req: Request, res: Response) {
@@ -29,7 +29,7 @@ class Auth {
       } catch (err) {
         res.status(400)
       }
-    } else res.status(400).json('Error')
+    } else res.status(400).json('Incorrect User!')
     return req.body
   }
   async auth(req: Request, res: Response) {
