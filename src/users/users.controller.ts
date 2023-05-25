@@ -51,7 +51,7 @@ class UsersController {
   }
   async getUsers(req: Request, res: Response) {
     const users = await myDataSource.getRepository(Users).find()
-
+    
     res.status(200).json(users)
     return users
   }

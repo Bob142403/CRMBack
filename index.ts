@@ -2,6 +2,7 @@ import cors from 'cors'
 import users from './src/users/users.route.ts'
 import clients from './src/clients/clients.route.ts'
 import auths from './src/auth/auth.route.ts'
+import company from './src/company/company.route.ts'
 import express from 'express'
 
 const PORT = process.env.PORT ?? 3000
@@ -12,6 +13,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 app.use('/users', users)
 app.use('/clients', clients)
+app.use('/company', company)
 app.use(auths)
 
 app.listen(PORT, () => {

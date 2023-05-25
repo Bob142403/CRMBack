@@ -9,10 +9,10 @@ const { addUser, getUserById, updateUser, deleteUser, getUsers } =
 
 const router = Router()
   .use(verifyToken)
-  .post('/', addUser)
-  .delete('/:id', deleteUser)
-  .put('/:id', updateUser)
-  .get('/', getUsers)
-  .get('/:id', getUserById)
+  .post('/create-user', addUser)
+  .delete('/delete-user/:id', deleteUser)
+  .put('/update-user/:id', updateUser)
+  .get('/list', getUsers)
+  .get('/get-user/:id', getUserById)
 
 export default router

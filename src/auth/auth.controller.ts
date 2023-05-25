@@ -3,6 +3,7 @@ import jsonwebtoken from 'jsonwebtoken'
 import { PRIVATE_KEY } from '../users/users.route.ts'
 import { myDataSource } from '../services/db.ts'
 import { Users } from '../entity/user.entity.ts'
+import User from '../types/User.ts'
 
 class Auth {
   async signIn(req: Request, res: Response) {
@@ -15,7 +16,7 @@ class Auth {
       })
       if (!user) {
         res.status(404).json('User Not Found!')
-      } else res.status(200).json({ msg: token })
+      } else res.status(200).json(token)
     } else res.status(404).json('Incorrect User!')
     return req.body
   }
@@ -36,13 +37,16 @@ class Auth {
   async auth(req: Request, res: Response) {
     try {
       const token = req.headers.authorization
-      const user = jsonwebtoken.verify(token || '', PRIVATE_KEY)
-      res.status(200).json(user)
+      const user = jsonwebtoken.verify(token || '', PRIVATE_KEY) as User
+      const userInfo = await myDataSource
+        .getRepository(Users)
+        .findOneBy({ email: user.email })
+
+      res.status(200).json(userInfo)
     } catch (err) {
       res.status(400).json('Token is not verified')
     }
   }
 }
-//auth
-//axios
+
 export default Auth

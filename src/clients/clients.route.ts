@@ -7,10 +7,10 @@ const { addClient, deleteClient, getClientById, getClients, updateClient } =
 
 const router = Router()
   .use(verifyToken)
-  .post('/', addClient)
-  .delete('/:id', deleteClient)
-  .get('/', getClients)
-  .get('/:id', getClientById)
-  .put('/:id', updateClient)
+  .post('/create-client', addClient)
+  .delete('/delete-client/:id', deleteClient)
+  .get('/list', getClients)
+  .get('/get-client/:id', getClientById)
+  .put('/update-client/:id', updateClient)
 
 export default router

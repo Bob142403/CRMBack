@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from 'express'
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
   try {
     const token = req.headers.authorization
+    console.log(token)
     jsonwebtoken.verify(token || '', PRIVATE_KEY)
     next()
   } catch (err) {
