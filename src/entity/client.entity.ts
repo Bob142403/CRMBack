@@ -19,4 +19,7 @@ export class Clients {
 
   @Column()
   address!: string
+  
+  @Column()
+  company_id!: number
 }

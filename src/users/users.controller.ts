@@ -51,9 +51,17 @@ class UsersController {
   }
   async getUsers(req: Request, res: Response) {
     const users = await myDataSource.getRepository(Users).find()
-    
+
     res.status(200).json(users)
     return users
+  }
+  async getUsersByCompanyId(req: Request, res: Response) {
+    const users = myDataSource.getRepository(Users).findOneBy({
+      company_id: +req.body.company_id,
+    })
+
+    if (users) res.status(200).json(users)
+    else res.status(400).json('Incorrect Id!')
   }
 }
 

@@ -16,4 +16,7 @@ export class Users {
 
   @Column()
   password!: string
+
+  @Column()
+  company_id!: number
 }

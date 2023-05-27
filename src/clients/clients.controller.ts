@@ -56,6 +56,16 @@ class ClientsController {
     res.status(200).json(clients)
     return clients
   }
+  async getClientsByCompanyId(req: Request, res: Response) {
+    const clients = await myDataSource.getRepository(Clients).findOneBy({
+      company_id: +req.params.company_id,
+    })
+
+    if (clients) res.status(200).json(clients)
+    else res.status(400).json('Incorrect Id!')
+
+    return clients
+  }
 }
 
 export default ClientsController
