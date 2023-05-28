@@ -45,8 +45,7 @@ class ClientsController {
       id: +req.params.id,
     })
 
-    if (client) res.status(200).json(client)
-    else res.status(400).json('Incorrect Id!')
+    res.status(200).json(client)
 
     return client
   }
@@ -57,12 +56,10 @@ class ClientsController {
     return clients
   }
   async getClientsByCompanyId(req: Request, res: Response) {
-    const clients = await myDataSource.getRepository(Clients).findOneBy({
-      company_id: +req.params.company_id,
+    const clients = await myDataSource.getRepository(Clients).findBy({
+      company_id: +req.params.companyId,
     })
-
-    if (clients) res.status(200).json(clients)
-    else res.status(400).json('Incorrect Id!')
+    res.status(200).json(clients)
 
     return clients
   }

@@ -18,6 +18,6 @@ const router = Router()
   .get('/list', getClients)
   .get('/get-client/:id', getClientById)
   .put('/update-client/:id', updateClient)
-  .get('/get-clients-companyId/:company_id', getClientsByCompanyId)
+  .get('/get-clients-companyId/:companyId', getClientsByCompanyId)
 
 export default router

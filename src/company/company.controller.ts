@@ -11,6 +11,7 @@ class CompanyController {
           .getRepository(Company)
           .create(req.body)
         await myDataSource.getRepository(Company).save(company)
+        console.log(1);
         res.status(200).json('Company created!')
       } catch (err) {
         res.status(400)
@@ -29,8 +30,7 @@ class CompanyController {
       id: +req.params.id,
     })
 
-    if (company) res.status(200).json(company)
-    else res.status(400).json('Incorrect Id!')
+    res.status(200).json(company)
 
     return company
   }

@@ -20,6 +20,6 @@ const router = Router()
   .put('/update-user/:id', updateUser)
   .get('/list', getUsers)
   .get('/get-user/:id', getUserById)
-  .get('/get-users-companyId/:company_id', getUsersByCompanyId)
+  .get('/get-users-companyId/:companyId', getUsersByCompanyId)
 
 export default router
