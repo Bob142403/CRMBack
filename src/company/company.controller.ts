@@ -7,12 +7,17 @@ class CompanyController {
     const { name } = req.body
     if (name) {
       try {
-        const company = await myDataSource
+        const checkCompany = await myDataSource
           .getRepository(Company)
-          .create(req.body)
-        await myDataSource.getRepository(Company).save(company)
-        console.log(1);
-        res.status(200).json('Company created!')
+          .findOneBy({
+            name,
+          })
+
+        if (!checkCompany) {
+          const company = myDataSource.getRepository(Company).create(req.body)
+          await myDataSource.getRepository(Company).save(company)
+          res.status(200).json('Company created!')
+        } else res.status(200).json('Company Already Excist!')
       } catch (err) {
         res.status(400)
       }

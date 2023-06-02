@@ -16,10 +16,7 @@ class Auth {
       })
       if (!user) {
         res.status(404).json('User Not Found!')
-      } else
-        res
-          .status(200)
-          .json({ token, company_id: user.company_id, id: user.id })
+      } else res.status(200).json({ token, user })
     } else res.status(404).json('Incorrect User!')
     return req.body
   }
