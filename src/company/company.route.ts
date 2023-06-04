@@ -11,7 +11,6 @@ const {
 } = new CompanyController()
 
 const router = Router()
-  .use(verifyToken)
   .post('/create-company', addCompany)
   .get('/list', getCompanes)
   .get('/get-company/:id', getCompanyById)

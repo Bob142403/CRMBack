@@ -15,9 +15,9 @@ const {
 
 const router = Router()
   .use(verifyToken)
+  .put('/update-user/:id', updateUser)
   .post('/create-user', addUser)
   .delete('/delete-user/:id', deleteUser)
-  .put('/update-user/:id', updateUser)
   .get('/list', getUsers)
   .get('/get-user/:id', getUserById)
   .get('/get-users-companyId/:companyId', getUsersByCompanyId)

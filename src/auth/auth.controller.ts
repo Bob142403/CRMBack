@@ -4,6 +4,7 @@ import { PRIVATE_KEY } from '../users/users.route.ts'
 import { myDataSource } from '../services/db.ts'
 import { Users } from '../entity/user.entity.ts'
 import User from '../types/User.ts'
+import { log } from 'console'
 
 class Auth {
   async signIn(req: Request, res: Response) {
@@ -15,7 +16,7 @@ class Auth {
         password,
       })
       if (!user) {
-        res.status(404).json('User Not Found!')
+        res.status(404).json('Incorrect Email or Passsword')
       } else res.status(200).json({ token, user })
     } else res.status(404).json('Incorrect User!')
     return req.body
@@ -46,6 +47,20 @@ class Auth {
     } catch (err) {
       res.status(400).json('Token is not verified')
     }
+  }
+  async chooseCompany(req: Request, res: Response) {
+    const user = await myDataSource.getRepository(Users).findOneBy({
+      id: +req.params.id,
+    })
+    if (user) {
+      myDataSource.getRepository(Users).merge(user, req.body)
+
+      const results = await myDataSource.getRepository(Users).save(user)
+      console.log(results)
+
+      res.json(results)
+    } else res.status(400).json('Incorrect Id!')
+    return req.body
   }
 }
 
