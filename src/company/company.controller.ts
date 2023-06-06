@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import { myDataSource } from '../services/db.ts'
 import { Company } from '../entity/company.entity.ts'
+import { Users } from '../entity/user.entity.ts'
+import { Clients } from '../entity/client.entity.ts'
 
 class CompanyController {
   async addCompany(req: Request, res: Response) {
@@ -12,14 +14,15 @@ class CompanyController {
           .findOneBy({
             name,
           })
-        console.log(checkCompany)
+
         if (!checkCompany) {
           const company = await myDataSource
             .getRepository(Company)
             .create(req.body)
+
           await myDataSource.getRepository(Company).save(company)
           res.status(200).json(company)
-        } else res.status(200).json('Company Already Excist!')
+        } else res.status(200).json(checkCompany)
       } catch (err) {
         res.status(400)
       }
@@ -45,6 +48,20 @@ class CompanyController {
     const results = await myDataSource
       .getRepository(Company)
       .delete(req.params.id)
+
+    await myDataSource
+      .getRepository(Users)
+      .createQueryBuilder('users')
+      .delete()
+      .where('company_id=:company_id', { company_id: req.params.id })
+      .execute()
+
+    await myDataSource
+      .getRepository(Clients)
+      .createQueryBuilder('clients')
+      .delete()
+      .where('company_id=:company_id', { company_id: req.params.id })
+      .execute()
 
     if (results.affected) res.status(200).json('Success')
     else res.status(400).json('Incorrect Id!')

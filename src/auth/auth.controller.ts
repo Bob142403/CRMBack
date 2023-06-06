@@ -43,7 +43,8 @@ class Auth {
         .getRepository(Users)
         .findOneBy({ email: user.email })
 
-      res.status(200).json(userInfo)
+      if (userInfo) res.status(200).json(userInfo)
+      else res.status(400).json('Error')
     } catch (err) {
       res.status(400).json('Token is not verified')
     }
