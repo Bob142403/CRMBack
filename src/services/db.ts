@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm'
-import { CreateMigration1566993933810 } from '../migrations/1566993933810-CreateMigration'
+import { CreateMigration1566993933812 } from '../migrations/1566993933812-CreateMigration'
 
 export const myDataSource = new DataSource({
   type: 'mysql',
@@ -10,7 +10,7 @@ export const myDataSource = new DataSource({
   entities: ['src/entity/*.entity.ts'],
   logging: true,
   migrationsRun: true,
-  migrations: [CreateMigration1566993933810],
+  migrations: [CreateMigration1566993933812],
 })
 
 myDataSource

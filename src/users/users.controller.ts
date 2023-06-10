@@ -49,7 +49,9 @@ class UsersController {
     return results
   }
   async getUsers(req: Request, res: Response) {
-    const users = await myDataSource.getRepository(Users).find()
+    const users = await myDataSource
+      .getRepository(Users)
+      .findBy(req.body['auth'])
 
     res.status(200).json(users)
     return users
@@ -60,10 +62,10 @@ class UsersController {
     })
 
     res.status(200).json(users)
-  } 
+  }
 }
 
 export default UsersController
 /**
- * 
+ *
  */

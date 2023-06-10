@@ -4,6 +4,7 @@ import { Clients } from '../entity/client.entity.ts'
 
 class ClientsController {
   async addClient(req: Request, res: Response) {
+    console.log(req.body)
     const { first_name, last_name, email, phone_number, address } = req.body
     if (first_name && last_name && email && phone_number && address) {
       try {
@@ -13,9 +14,9 @@ class ClientsController {
         await myDataSource.getRepository(Clients).save(client)
         res.status(200).json('Client created!')
       } catch (err) {
-        res.status(400)
+        res.status(400).json(err)
       }
-    } else res.status(400)
+    } else res.status(400).json('Error')
     return req.body
   }
   async deleteClient(req: Request, res: Response) {
@@ -50,7 +51,9 @@ class ClientsController {
     return client
   }
   async getClients(req: Request, res: Response) {
-    const clients = await myDataSource.getRepository(Clients).find()
+    const clients = await myDataSource
+      .getRepository(Clients)
+      .findBy(req.body['auth'])
 
     res.status(200).json(clients)
     return clients

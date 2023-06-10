@@ -7,26 +7,23 @@ import { Clients } from '../entity/client.entity.ts'
 class CompanyController {
   async addCompany(req: Request, res: Response) {
     const { name } = req.body
-    if (name) {
-      try {
-        const checkCompany = await myDataSource
+    try {
+      const checkCompany = await myDataSource.getRepository(Company).findOneBy({
+        name,
+      })
+
+      if (!checkCompany) {
+        const company = await myDataSource
           .getRepository(Company)
-          .findOneBy({
-            name,
-          })
+          .create(req.body)
 
-        if (!checkCompany) {
-          const company = await myDataSource
-            .getRepository(Company)
-            .create(req.body)
+        await myDataSource.getRepository(Company).save(company)
+        res.status(200).json({ ...company, role: `admin` })
+      } else res.status(200).json(checkCompany)
+    } catch (err) {
+      res.status(400).json(err)
+    }
 
-          await myDataSource.getRepository(Company).save(company)
-          res.status(200).json(company)
-        } else res.status(200).json(checkCompany)
-      } catch (err) {
-        res.status(400)
-      }
-    } else res.status(400)
     return req.body
   }
   async getCompanes(req: Request, res: Response) {
@@ -39,6 +36,8 @@ class CompanyController {
     const company = await myDataSource.getRepository(Company).findOneBy({
       id: +req.params.id,
     })
+
+    console.log(req.params.id)
 
     res.status(200).json(company)
 

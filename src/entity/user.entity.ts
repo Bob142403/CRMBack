@@ -19,4 +19,7 @@ export class Users {
 
   @Column()
   company_id!: number
+
+  @Column()
+  role!: string
 }

@@ -4,17 +4,16 @@ import { PRIVATE_KEY } from '../users/users.route.ts'
 import { myDataSource } from '../services/db.ts'
 import { Users } from '../entity/user.entity.ts'
 import User from '../types/User.ts'
-import { log } from 'console'
 
 class Auth {
   async signIn(req: Request, res: Response) {
     const { email, password } = req.body
     if (email && password) {
-      const token = jsonwebtoken.sign(req.body, PRIVATE_KEY)
       const user = await myDataSource.getRepository(Users).findOneBy({
         email,
         password,
       })
+      const token = jsonwebtoken.sign(req.body, PRIVATE_KEY)
       if (!user) {
         res.status(404).json('Incorrect Email or Passsword')
       } else res.status(200).json({ token, user })
@@ -25,6 +24,15 @@ class Auth {
     const { first_name, last_name, email, password } = req.body
     if (first_name && last_name && email && password) {
       try {
+        const userCheck = await myDataSource
+          .getRepository(Users)
+          .findOneBy({ email })
+
+        if (userCheck) {
+          res.status(201).json('This email is already Excist')
+          return req.body
+        }
+
         const user = await myDataSource.getRepository(Users).create(req.body)
         await myDataSource.getRepository(Users).save(user)
         res.status(200).json('User Created')
@@ -57,7 +65,6 @@ class Auth {
       myDataSource.getRepository(Users).merge(user, req.body)
 
       const results = await myDataSource.getRepository(Users).save(user)
-      console.log(results)
 
       res.json(results)
     } else res.status(400).json('Incorrect Id!')
