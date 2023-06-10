@@ -6,17 +6,13 @@ class ClientsController {
   async addClient(req: Request, res: Response) {
     console.log(req.body)
     const { first_name, last_name, email, phone_number, address } = req.body
-    if (first_name && last_name && email && phone_number && address) {
-      try {
-        const client = await myDataSource
-          .getRepository(Clients)
-          .create(req.body)
-        await myDataSource.getRepository(Clients).save(client)
-        res.status(200).json('Client created!')
-      } catch (err) {
-        res.status(400).json(err)
-      }
-    } else res.status(400).json('Error')
+    try {
+      const client = await myDataSource.getRepository(Clients).create(req.body)
+      await myDataSource.getRepository(Clients).save(client)
+      res.status(200).json('Client created!')
+    } catch (err) {
+      res.status(400).json(err)
+    }
     return req.body
   }
   async deleteClient(req: Request, res: Response) {
@@ -56,14 +52,6 @@ class ClientsController {
       .findBy(req.body['auth'])
 
     res.status(200).json(clients)
-    return clients
-  }
-  async getClientsByCompanyId(req: Request, res: Response) {
-    const clients = await myDataSource.getRepository(Clients).findBy({
-      company_id: +req.params.companyId,
-    })
-    res.status(200).json(clients)
-
     return clients
   }
 }

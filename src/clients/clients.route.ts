@@ -2,14 +2,8 @@ import { Router } from 'express'
 import ClientsController from './clients.controller.ts'
 import { verifyToken } from '../middlewares/verify-token.ts'
 
-const {
-  addClient,
-  deleteClient,
-  getClientById,
-  getClients,
-  updateClient,
-  getClientsByCompanyId,
-} = new ClientsController()
+const { addClient, deleteClient, getClientById, getClients, updateClient } =
+  new ClientsController()
 
 const router = Router()
   .use(verifyToken)
@@ -18,6 +12,5 @@ const router = Router()
   .get('/list', getClients)
   .get('/get-client/:id', getClientById)
   .put('/update-client/:id', updateClient)
-  .get('/get-clients-companyId/:companyId', getClientsByCompanyId)
 
 export default router

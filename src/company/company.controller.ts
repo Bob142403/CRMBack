@@ -37,8 +37,6 @@ class CompanyController {
       id: +req.params.id,
     })
 
-    console.log(req.params.id)
-
     res.status(200).json(company)
 
     return company

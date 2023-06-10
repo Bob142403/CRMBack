@@ -1,19 +1,59 @@
 import { Request, Response } from 'express'
 import { Users } from '../entity/user.entity.ts'
 import { myDataSource } from '../services/db.ts'
+import generatePassword from 'password-generator'
+// import { createTransport, getTestMessageUrl } from 'nodemailer'
 
 class UsersController {
   async addUser(req: Request, res: Response) {
-    const { first_name, last_name, email, password } = req.body
-    if (first_name && last_name && email && password) {
-      try {
-        const user = await myDataSource.getRepository(Users).create(req.body)
-        await myDataSource.getRepository(Users).save(user)
-        res.status(200).json('User Created')
-      } catch (err) {
-        res.status(400)
+    const { email } = req.body
+
+    const password = generatePassword()
+
+    // create reusable transporter object using the default SMTP transport
+    // let transporter = createTransport({
+    //   host: 'gmail',
+    //   auth: {
+    //     user: 'sbobohoni6@gmail.com', // generated ethereal user
+    //     pass: 'tmbvgiqysbhoqyjd', // generated ethereal password
+    //   },
+    // })
+
+    // // send mail with defined transport object
+    // let info = await transporter
+    //   .sendMail({
+    //     from: 'sbobohoni6@gmail.com', // sender address
+    //     to: 'sbobohoni4@gmail.com', // list of receivers
+    //     subject: 'Hello ✔', // Subject line
+    //     text: 'Hello world?', // plain text body
+    //     html: '<b>Hello world?</b>', // html body
+    //   })
+    //   .catch((err) => {
+    //     console.log('EROORRR;', err)
+    //   })
+
+    // console.log('Message sent: %s', info)
+    // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+    // // Preview only available when sending through an Ethereal account
+
+    try {
+      const userCheck = await myDataSource
+        .getRepository(Users)
+        .findOneBy({ email })
+
+      if (userCheck) {
+        res.status(201).json('This email is already Excist')
+        return req.body
       }
-    } else res.status(400).json('Error')
+      const user = await myDataSource
+        .getRepository(Users)
+        .create({ ...req.body, password })
+      await myDataSource.getRepository(Users).save(user)
+      res.status(200).json('User Created')
+    } catch (err) {
+      res.status(400)
+    }
     return req.body
   }
   async deleteUser(req: Request, res: Response) {
@@ -56,16 +96,6 @@ class UsersController {
     res.status(200).json(users)
     return users
   }
-  async getUsersByCompanyId(req: Request, res: Response) {
-    const users = myDataSource.getRepository(Users).findBy({
-      company_id: +req.params.companyId,
-    })
-
-    res.status(200).json(users)
-  }
 }
 
 export default UsersController
-/**
- *
- */

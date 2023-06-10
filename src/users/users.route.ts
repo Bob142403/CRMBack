@@ -4,14 +4,8 @@ import UsersController from './users.controller.ts'
 
 export const PRIVATE_KEY = 'SHHHHH'
 
-const {
-  addUser,
-  getUserById,
-  updateUser,
-  deleteUser,
-  getUsers,
-  getUsersByCompanyId,
-} = new UsersController()
+const { addUser, getUserById, updateUser, deleteUser, getUsers } =
+  new UsersController()
 
 const router = Router()
   .use(verifyToken)
@@ -20,6 +14,5 @@ const router = Router()
   .delete('/delete-user/:id', deleteUser)
   .get('/list', getUsers)
   .get('/get-user/:id', getUserById)
-  .get('/get-users-companyId/:companyId', getUsersByCompanyId)
 
 export default router
