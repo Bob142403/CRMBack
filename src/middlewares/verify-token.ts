@@ -26,9 +26,3 @@ export async function verifyToken(
     res.status(400).json('Token is not verified')
   }
 }
-/**
- * роль
- * super user: список company
- * admin: список user
- * обычный : не иммет
- */
