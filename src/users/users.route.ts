@@ -4,13 +4,13 @@ import UsersController from './users.controller.ts'
 
 export const PRIVATE_KEY = 'SHHHHH'
 
-const { addUser, getUserById, updateUser, deleteUser, getUsers } =
+const { createUser, getUserById, updateUser, deleteUser, getUsers } =
   new UsersController()
 
 const router = Router()
   .use(verifyToken)
   .put('/update-user/:id', updateUser)
-  .post('/create-user', addUser)
+  .post('/create-user', createUser)
   .delete('/delete-user/:id', deleteUser)
   .get('/list', getUsers)
   .get('/get-user/:id', getUserById)

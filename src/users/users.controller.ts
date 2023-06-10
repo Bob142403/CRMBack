@@ -5,7 +5,7 @@ import generatePassword from 'password-generator'
 // import { createTransport, getTestMessageUrl } from 'nodemailer'
 
 class UsersController {
-  async addUser(req: Request, res: Response) {
+  async createUser(req: Request, res: Response) {
     const { email } = req.body
 
     const password = generatePassword()
@@ -61,7 +61,7 @@ class UsersController {
       .getRepository(Users)
       .delete(req.params.id)
 
-    if (results.affected) res.status(200).json('Success')
+    if (results.affected) res.status(200).json('User Deleted')
     else res.status(400).json('Incorrect Id!')
 
     return results.affected
@@ -73,9 +73,9 @@ class UsersController {
     if (user) {
       myDataSource.getRepository(Users).merge(user, req.body)
 
-      const results = await myDataSource.getRepository(Users).save(user)
+      await myDataSource.getRepository(Users).save(user)
 
-      res.json(results)
+      res.json('User Updated')
     } else res.status(400).json('Incorrect Id!')
     return req.body
   }

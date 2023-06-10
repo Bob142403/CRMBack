@@ -3,7 +3,7 @@ import CompanyController from './company.controller.ts'
 import { verifyToken } from '../middlewares/verify-token.ts'
 
 const {
-  addCompany,
+  createCompany,
   getCompanes,
   getCompanyById,
   updateCompany,
@@ -11,7 +11,7 @@ const {
 } = new CompanyController()
 
 const router = Router()
-  .post('/create-company', addCompany)
+  .post('/create-company', createCompany)
   .get('/list', getCompanes)
   .get('/get-company/:id', getCompanyById)
   .delete('/delete-company/:id', deleteCompany)

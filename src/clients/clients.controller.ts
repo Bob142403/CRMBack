@@ -3,9 +3,7 @@ import { myDataSource } from '../services/db.ts'
 import { Clients } from '../entity/client.entity.ts'
 
 class ClientsController {
-  async addClient(req: Request, res: Response) {
-    console.log(req.body)
-    const { first_name, last_name, email, phone_number, address } = req.body
+  async createClient(req: Request, res: Response) {
     try {
       const client = await myDataSource.getRepository(Clients).create(req.body)
       await myDataSource.getRepository(Clients).save(client)
@@ -20,7 +18,7 @@ class ClientsController {
       .getRepository(Clients)
       .delete(req.params.id)
 
-    if (results.affected) res.status(200).json('Success')
+    if (results.affected) res.status(200).json('Client Deleted')
     else res.status(400).json('Incorrect Id!')
     return results.affected
   }
@@ -31,9 +29,9 @@ class ClientsController {
     if (client) {
       myDataSource.getRepository(Clients).merge(client, req.body)
 
-      const results = await myDataSource.getRepository(Clients).save(client)
+      await myDataSource.getRepository(Clients).save(client)
 
-      res.json(results)
+      res.json('Client Updated')
     } else res.status(400).json('Incorrect Id!')
     return req.body
   }

@@ -5,7 +5,7 @@ import { Users } from '../entity/user.entity.ts'
 import { Clients } from '../entity/client.entity.ts'
 
 class CompanyController {
-  async addCompany(req: Request, res: Response) {
+  async createCompany(req: Request, res: Response) {
     const { name } = req.body
     try {
       const checkCompany = await myDataSource.getRepository(Company).findOneBy({
@@ -60,8 +60,9 @@ class CompanyController {
       .where('company_id=:company_id', { company_id: req.params.id })
       .execute()
 
-    if (results.affected) res.status(200).json('Success')
+    if (results.affected) res.status(200).json('Company Deleted')
     else res.status(400).json('Incorrect Id!')
+
     return results.affected
   }
   async updateCompany(req: Request, res: Response) {
@@ -71,9 +72,9 @@ class CompanyController {
     if (company) {
       myDataSource.getRepository(Company).merge(company, req.body)
 
-      const results = await myDataSource.getRepository(Company).save(company)
+      await myDataSource.getRepository(Company).save(company)
 
-      res.json(results)
+      res.json('Company Updated')
     } else res.status(400).json('Incorrect Id!')
     return req.body
   }
